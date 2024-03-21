@@ -21,13 +21,17 @@ func NewUserController(repo repos.UserRepo) *UserController {
 	return &UserController{repo: repo}
 }
 
-func (c *UserController) Index(w http.ResponseWriter, r *http.Request) {}
+func (c *UserController) Index(w http.ResponseWriter, r *http.Request) {
+	// return c.repo.GetAll()
+}
 
 func (c *UserController) Show(w http.ResponseWriter, r *http.Request) {}
 
 func (c *UserController) Create(w http.ResponseWriter, r *http.Request) {
-	var user models.User
-	json.NewDecoder(r.Body).Decode(&user)
+	var input CreateUserInput
+	json.NewDecoder(r.Body).Decode(&input)
+
+	user := models.User{Name: input.Name, Email: input.Email, Password: input.Password}
 
 	c.repo.Create(&user)
 
@@ -35,3 +39,5 @@ func (c *UserController) Create(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(&user)
 }
+
+func (c *UserController) Update(w http.ResponseWriter, r *http.Request) {}
