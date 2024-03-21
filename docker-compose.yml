@@ -1,0 +1,37 @@
+version: "3.9"
+services:
+  app:
+    container_name: app
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: dev
+    volumes:
+      - .:/opt/app
+    ports:
+      - "${APP_PORT:-3000}:${APP_PORT:-3000}"
+    env_file:
+      - ".env"
+    networks: ["backend"]
+
+  postgres:
+    container_name: postgres
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT:-5432}:${POSTGRES_PORT:-5432}"
+    volumes:
+      - data:/var/lib/postgresql/data
+    env_file:
+      - ".env"
+    networks: ["backend"]
+
+volumes:
+  data:
+
+networks:
+  backend:
+    driver: bridge
