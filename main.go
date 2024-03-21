@@ -1,7 +1,9 @@
 package main
 
 import (
+	"battle-brackets/controllers"
 	"battle-brackets/db"
+	"battle-brackets/repos"
 	"log"
 	"net/http"
 	"os"
@@ -21,6 +23,17 @@ func main() {
 
 	db := db.Init()
 
+	InitUserController(r, db)
+
 	port := os.Getenv("APP_PORT")
 	http.ListenAndServe(":"+port, r)
+}
+
+func InitUserController(router *mux.Router, db *gorm.DB) {
+	r := repos.NewUserRepo(db)
+	c := controllers.NewUserController(r)
+
+	muxBase := "/api/users"
+	router.HandleFunc(muxBase, c.Show).Methods(http.MethodGet)
+	router.HandleFunc(muxBase, c.Create).Methods(http.MethodPost)
 }
