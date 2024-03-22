@@ -8,15 +8,15 @@ import (
 )
 
 type UserRepo struct {
-	DB *gorm.DB
+	pg *gorm.DB
 }
 
-func NewUserRepo(db *gorm.DB) UserRepo {
-	return UserRepo{db}
+func NewUserRepo(db *gorm.DB) *UserRepo {
+	return &UserRepo{pg: db}
 }
 
 func (r UserRepo) Create(u *models.User) *models.User {
-	if result := r.DB.Create(&u); result.Error != nil {
+	if result := r.pg.Create(&u); result.Error != nil {
 		fmt.Println(result.Error)
 	}
 
@@ -28,3 +28,7 @@ func (r UserRepo) Create(u *models.User) *models.User {
 func (u UserRepo) GetOne() {}
 
 func (u UserRepo) GetAll() {}
+
+func (u *UserRepo) Update() {}
+
+func (u *UserRepo) Delete() {}
