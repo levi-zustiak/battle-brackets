@@ -26,3 +26,5 @@ func (r UserRepo) Create(u *models.User) *models.User {
 }
 
 func (u UserRepo) GetOne() {}
+
+func (u UserRepo) GetAll() {}
